@@ -10,8 +10,11 @@ on:
 
 env:
   CLOUDSMITH_NAMESPACE: ${{ vars.CLOUDSMITH_NAMESPACE }}
-  CLOUDSMITH_STAGING_REPO: 'production'
-  CLOUDSMITH_PRODUCTION_REPO: 'staging'
+  # CLOUDSMITH_STAGING_REPO: 'production'
+  # CLOUDSMITH_PRODUCTION_REPO: 'staging'
+  # Change 3
+  CLOUDSMITH_STAGING_REPO: 'staging'
+  CLOUDSMITH_PRODUCTION_REPO: 'production'
   CLOUDSMITH_SERVICE_SLUG: ${{ vars.CLOUDSMITH_SERVICE_SLUG }}
   PACKAGE_NAME: 'example_package'
 
@@ -28,6 +31,10 @@ jobs:
         with:
           oidc-namespace: ${{ env.CLOUDSMITH_NAMESPACE }}
           oidc-service-slug: ${{ env.CLOUDSMITH_SERVICE_SLUG }}
+
+      # Change 4
+      - name: Install jq
+        run: sudo apt-get install -y jq
 
       - name: Get package identifier and promote
         run: |

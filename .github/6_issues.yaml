@@ -1,0 +1,50 @@
+Here are six issues identified in the provided GitHub Actions workflows, along with their fixes:
+
+1. Missing Build Command in build_package.yml
+Issue: The Build package step in build_package.yml is defined but has no command to build the package.
+Fix: Add the command to build the package using the Python build tool.
+
+      - name: Build package
+        run: python -m build
+        
+
+2. Permissions in build_package.yml is overly permissive.
+Issue: The id-token: write permission is granted in the Build Python Package workflow but isn't used. Unnecessary permissions increase the risk of privilege escalation.
+Fix: Remove the unused id-token permission:
+
+permissions:
+  contents: read
+  actions: write
+
+
+3. Incorrect Repositories in promote_package.yml
+Issue: The staging and production repositories in the promote_package.yml file are swapped. CLOUDSMITH_STAGING_REPO should be "staging" and CLOUDSMITH_PRODUCTION_REPO should be "production."
+Fix: Correct the values for the repository environment variables.
+
+  CLOUDSMITH_STAGING_REPO: 'staging'
+  CLOUDSMITH_PRODUCTION_REPO: 'production'
+
+
+4. 5. Missing JQ Installation in promote_package.yml
+Issue: The jq command is used in promote_package.yml to parse JSON, but jq is not installed by default on GitHub-hosted runners.
+Fix: Install jq before using it.
+
+      - name: Install jq
+        run: sudo apt-get install -y jq
+
+
+5. Hardcoded Workflow Dependency in release_package.yml
+Issue: The workflow_run trigger in Publish Python Package depends on the Build Python Package workflow but uses a hardcoded workflow name. Any change to the Build Python Package workflow name will break this dependency.
+Fix: Use the workflow file name instead of the display name for better consistency:
+
+workflows: ["build_package.yml"]
+
+
+6. Missing Permissions for release_package.yml
+Issue: The workflow requires write access to the repository to download artifacts, but it is only granted read permissions under contents. This could lead to a failure when trying to access the artifact.
+Fix: Add id-token: write to the permissions block.
+
+permissions:
+  contents: read
+  actions: read
+  id-token: write

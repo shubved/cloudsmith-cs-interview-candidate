@@ -2,7 +2,9 @@ name: Publish Python Package
 
 on:
   workflow_run:
-    workflows: ["Build Python Package"]
+    # workflows: ["Build Python Package"]
+    # Change 5
+    workflows: ["build_package.yml"]
     types:
       - completed
     branches:
@@ -16,6 +18,8 @@ env:
 permissions:
   contents: read
   actions: read
+  # Change 6
+  id-token: write
 
 jobs:
   publish:

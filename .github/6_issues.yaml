@@ -25,7 +25,7 @@ Fix: Correct the values for the repository environment variables.
   CLOUDSMITH_PRODUCTION_REPO: 'production'
 
 
-4. 5. Missing JQ Installation in promote_package.yml
+4. Missing JQ Installation in promote_package.yml
 Issue: The jq command is used in promote_package.yml to parse JSON, but jq is not installed by default on GitHub-hosted runners.
 Fix: Install jq before using it.
 
